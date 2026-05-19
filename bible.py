@@ -83,7 +83,7 @@ def send(text):
         json={'chat_id': CHAT_ID, 'text': text}
     )
 
-header = f'📖 {date_str}  {range_str}\n{weather_str}  [D{day_num}/{TOTAL_DAYS}]\n{"─"*20}'
+header = f'📖 {date_str}  {range_str}\n{weather_str}  [D{day_num}/{TOTAL_DAYS}]\n{"─"*18}'
 send(header)
 
 MAX = 4096
