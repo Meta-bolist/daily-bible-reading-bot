@@ -28,7 +28,7 @@ for book, chapters in BOOKS:
         ALL_CHAPTERS.append((book, ch))
 
 TOTAL_DAYS = (len(ALL_CHAPTERS) + 2) // 3
-START_DATE = date(2025, 1, 7)
+START_DATE = date(2026, 1, 7)
 
 kst = datetime.now(timezone(timedelta(hours=9)))
 today = kst.date()
