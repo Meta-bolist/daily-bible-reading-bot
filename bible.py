@@ -70,28 +70,23 @@ def format_range(chs):
 
 range_str = format_range(chapters_today)
 
-with open('bible_nrv.json', 'r', encoding='utf-8') as f:
-    bible = json.load(f)
+with open('bible_sum.json', 'r', encoding='utf-8') as f:
+    summary = json.load(f)
 
-def get_chapter_text(book, chapter):
-    ch_data = bible.get(book, {}).get(str(chapter), {})
-    return '\n'.join(f'{v}. {ch_data[v]}' for v in sorted(ch_data, key=lambda x: int(x)))
+multi_book = len(set(b for b,c in chapters_today)) > 1
 
-def send(text):
-    requests.post(
-        f'https://api.telegram.org/bot{TOKEN}/sendMessage',
-        json={'chat_id': CHAT_ID, 'text': text}
-    )
-
-header = f'📖 {date_str}  {range_str}\n{weather_str}  [D{day_num}/{TOTAL_DAYS}]\n{"─"*18}'
-send(header)
-
-MAX = 4096
+summary_lines = []
 for book, ch in chapters_today:
-    chunk = f'[ {book} {ch}장 ]\n{get_chapter_text(book, ch)}'
-    while len(chunk) > MAX:
-        send(chunk[:MAX])
-        chunk = chunk[MAX:]
-    send(chunk)
+    s = summary.get(book, {}).get(f'{ch}장', '')
+    label = f'{book} {ch}장' if multi_book else f'{ch}장'
+    summary_lines.append(f'{label}: {s}')
+
+body = '\n'.join(summary_lines)
+msg = f'📖 {date_str}  {range_str}\n{weather_str}  [D{day_num}/{TOTAL_DAYS}]\n{"─"*18}\n\n{body}'
+
+requests.post(
+    f'https://api.telegram.org/bot{TOKEN}/sendMessage',
+    json={'chat_id': CHAT_ID, 'text': msg}
+)
 
 print('발송 완료')
