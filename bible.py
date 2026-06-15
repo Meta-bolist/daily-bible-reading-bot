@@ -44,11 +44,11 @@ try:
         'https://api.open-meteo.com/v1/forecast'
         '?latitude=37.6154&longitude=126.7224'
         '&daily=weathercode,temperature_2m_max,temperature_2m_min'
-        '&timezone=Asia/Seoul&forecast_days=1'
+        '&timezone=Asia/Seoul&forecast_days=2'
     ).json()
-    wcode    = res['daily']['weathercode'][0]
-    temp_max = round(res['daily']['temperature_2m_max'][0])
-    temp_min = round(res['daily']['temperature_2m_min'][0])
+    wcode    = res['daily']['weathercode'][1]
+    temp_max = round(res['daily']['temperature_2m_max'][1])
+    temp_min = round(res['daily']['temperature_2m_min'][1])
     wmap = {0:'☀️',1:'🌤️',2:'⛅',3:'☁️'}
     w_emoji = wmap.get(wcode,
         '🌧️' if wcode in [51,53,55,61,63,65,80,81,82] else
