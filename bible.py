@@ -58,13 +58,17 @@ try:
 except Exception:
     weather_str = '🌤️'
 
+def get_unit(book):
+    return '편' if book == '시편' else '장'
+
 def format_range(chs):
     result = []
     i = 0
     while i < len(chs):
         bk = chs[i][0]
+        unit = get_unit(bk)
         same = [c for b,c in chs if b==bk]
-        result.append(f'{bk} {same[0]}장' if len(same)==1 else f'{bk} {same[0]}~{same[-1]}장')
+        result.append(f'{bk} {same[0]}{unit}' if len(same)==1 else f'{bk} {same[0]}~{same[-1]}{unit}')
         i += len(same)
     return ', '.join(result)
 
@@ -77,9 +81,10 @@ multi_book = len(set(b for b,c in chapters_today)) > 1
 
 summary_lines = []
 for book, ch in chapters_today:
-    key = f'{ch}편' if book == '시편' else f'{ch}장'
+    unit = get_unit(book)
+    key = f'{ch}{unit}'
     s = summary.get(book, {}).get(key, '')
-    label = f'{book} {ch}장' if multi_book else f'{ch}장'
+    label = f'{book} {ch}{unit}' if multi_book else f'{ch}{unit}'
     summary_lines.append(f'{label}: {s}')
 
 body = '\n'.join(summary_lines)
