@@ -77,7 +77,8 @@ multi_book = len(set(b for b,c in chapters_today)) > 1
 
 summary_lines = []
 for book, ch in chapters_today:
-    s = summary.get(book, {}).get(f'{ch}장', '')
+    key = f'{ch}편' if book == '시편' else f'{ch}장'
+    s = summary.get(book, {}).get(key, '')
     label = f'{book} {ch}장' if multi_book else f'{ch}장'
     summary_lines.append(f'{label}: {s}')
 
@@ -88,5 +89,4 @@ requests.post(
     f'https://api.telegram.org/bot{TOKEN}/sendMessage',
     json={'chat_id': CHAT_ID, 'text': msg}
 )
-
 print('발송 완료')
